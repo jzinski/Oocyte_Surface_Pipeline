@@ -1,0 +1,29 @@
+# MATLAB
+*.asv
+*.m~
+*.mex*
+*.mat
+slprj/
+
+# R / RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data — large image stacks and pipeline outputs stay out of git
+data/*.tif
+data/*.tiff
+data/*.czi
+data/*.gif
+data/*.fig
+data/*_out.mat
+data/*_c1mask.mat
+data/*_masterplot_all.tif
+data/Oocyte_sample_list_thresh*.xlsx
