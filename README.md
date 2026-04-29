@@ -37,9 +37,28 @@ Oocyte_Surface_Pipeline/
 │   ├── Violinplot-Matlab/
 │   └── gifplayer/
 └── data/                            <- put image stacks + metadata xlsx here
-    ├── Oocyte_sample_list.xlsx      <- metadata template (edit to match your data)
+    ├── Oocyte_sample_list.xlsx      <- pre-filled for the 3 Zenodo sample stacks
     └── <your>.tif                   <- one 3-channel z-stack per oocyte
 ```
+
+## Sample data
+
+Three representative `.tif` z-stacks (one per genotype) are deposited on Zenodo
+and not included in the repo because of file size:
+
+[**doi:10.5281/zenodo.19895264**](https://doi.org/10.5281/zenodo.19895264)
+
+Files:
+
+| Genotype | Filename | Size |
+| --- | --- | --- |
+| WT | `WT_dazl_cyclinB1_10.tif` | 189 MB |
+| Δ6 | `d6_dazl_cyclinB1_14.tif` | 139 MB |
+| Δ6+11 | `d6+11_dazl_cyclinB1_19.tif` | 151 MB |
+
+Download all three and drop them into `data/`. The included
+`Oocyte_sample_list.xlsx` is already populated for these three samples, so the
+pipeline runs end-to-end with no editing.
 
 ## Requirements
 

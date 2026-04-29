@@ -1,7 +1,11 @@
 # data/
 
-Put one 3-channel `.tif` z-stack per oocyte here, plus the metadata spreadsheet
-`Oocyte_sample_list.xlsx`.
+Put one 3-channel `.tif` z-stack per oocyte here. The metadata spreadsheet
+`Oocyte_sample_list.xlsx` is already in this folder.
+
+For a quick end-to-end test, download the three sample stacks from Zenodo
+([doi:10.5281/zenodo.19895264](https://doi.org/10.5281/zenodo.19895264)) and
+drop them into this folder — the spreadsheet is pre-filled to match.
 
 Required columns in the spreadsheet:
 
