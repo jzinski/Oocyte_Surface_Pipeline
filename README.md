@@ -60,13 +60,63 @@ Download all three and drop them into `data/`. The included
 `Oocyte_sample_list.xlsx` is already populated for these three samples, so the
 pipeline runs end-to-end with no editing.
 
-## Requirements
+## System requirements
 
-- MATLAB R2021a or later, with the **Image Processing Toolbox** and
-  **Curve Fitting Toolbox**.
-- R ≥ 4.0 (for the publication plots) with packages:
-  `readxl, dplyr, tidyr, purrr, stringr, ggplot2, patchwork, R.matlab,
-  minpack.lm, forcats, scales`.
+### Hardware
+- A standard desktop/laptop is sufficient. ~8 GB RAM recommended (each oocyte
+  is a ~150–300 MB 3-channel z-stack held in memory while it is processed).
+- No GPU and no non-standard hardware required.
+
+### Software
+- **MATLAB** R2021a or later, with two toolboxes:
+  - [Image Processing Toolbox](https://www.mathworks.com/products/image.html)
+  - [Curve Fitting Toolbox](https://www.mathworks.com/products/curvefitting.html)
+  - Runs unmodified on [MATLAB Online](https://matlab.mathworks.com/), so no
+    local install is required.
+- **R** ≥ 4.0 (only for the optional publication plots in step 4), with the
+  CRAN packages listed below.
+
+The pipeline was developed on Windows 10/11 desktop MATLAB and is designed to
+run unmodified on MATLAB Online.
+
+## Installation guide
+
+### 1. Get the code from GitHub
+Either clone the repository:
+
+```bash
+git clone https://github.com/jzinski/Oocyte_Surface_Pipeline.git
+```
+
+or download it as a ZIP from
+<https://github.com/jzinski/Oocyte_Surface_Pipeline> (green **Code** button →
+**Download ZIP**) and unzip it.
+
+No compilation or build step is required — the code is plain MATLAB `.m` files
+and one R script. The MATLAB scripts add their own `functions/` and
+`thirdparty/` folders to the path automatically on launch.
+
+**Typical install time: under 1 minute** (the time to clone/unzip the repo).
+
+### 2. MATLAB and toolboxes
+Install MATLAB and the two required toolboxes from MathWorks:
+<https://www.mathworks.com/products/matlab.html>. The Image Processing Toolbox
+and Curve Fitting Toolbox are added from the MATLAB installer or **Add-On
+Explorer**. Alternatively, use [MATLAB Online](https://matlab.mathworks.com/)
+with no install. Typical toolbox install time is a few minutes on a normal
+broadband connection (dominated by download, not by this repo).
+
+### 3. R packages (optional — step 4 only)
+The publication plots use these CRAN packages:
+
+```r
+install.packages(c("readxl", "dplyr", "tidyr", "purrr", "stringr",
+                   "ggplot2", "patchwork", "R.matlab", "minpack.lm",
+                   "forcats", "scales"))
+```
+
+CRAN: <https://cran.r-project.org/>. Typical install time is 1–3 minutes
+depending on which packages are already present.
 
 ## Input data format
 
@@ -93,6 +143,65 @@ pipeline runs end-to-end with no editing.
 
 Each MATLAB script auto-adds `../functions` and `../thirdparty` to the path and
 `cd`s into `../data` on launch, so you can run them from anywhere.
+
+## Demo
+
+A small test dataset of three oocytes (one per genotype) is provided on Zenodo
+so the pipeline can be run end to end without the full image set.
+
+### Demo data
+Download the three `.tif` stacks from
+[doi:10.5281/zenodo.19895264](https://doi.org/10.5281/zenodo.19895264) into the
+`data/` folder. The bundled `data/Oocyte_sample_list.xlsx` is already filled in
+for exactly these three files, so no editing is needed.
+
+| Genotype | File |
+| --- | --- |
+| WT | `WT_dazl_cyclinB1_10.tif` |
+| Δ6 | `d6_dazl_cyclinB1_14.tif` |
+| Δ6+11 | `d6+11_dazl_cyclinB1_19.tif` |
+
+### Run the demo
+In MATLAB, run the scripts in order:
+
+```matlab
+run scripts/step1_generate_meta_files.m   % C1 segmentation + intensity stats
+run scripts/step2_post_meta_thresh.m      % C2/C3 thresholds + angle binning
+run scripts/step3_plot_script.m           % plots + sigmoid fits
+```
+
+To capture the run time, wrap a step with `tic`/`toc`, e.g.:
+
+```matlab
+tic; run scripts/step1_generate_meta_files.m; toc
+```
+
+### Expected output
+For each of the three oocytes the demo writes, into `data/`:
+
+- `*_c1mask.mat` — 3D oocyte mask (from step 1)
+- `*_out.mat` — per-oocyte metrics (`elePercC2`, `elePercC3`, voxel counts, thresholds)
+- `*_c2.gif`, `*_c3.gif`, `*_c1.gif` — QC overlays of the masks on the raw stack
+- `*_masterplot_all.tif` — per-oocyte summary figure
+
+plus the updated tables `Oocyte_sample_list_thresh.xlsx` and
+`Oocyte_sample_list_thresh2.xlsx`, and the genotype coverage / half-max plots
+from step 3.
+
+The key per-oocyte readout is the half-max angle from the animal pole
+(0° = animal pole, 180° = vegetal), reported in the output tables. The expected
+biological pattern is that cyclinB1 caps the animal pole (small half-max) while
+dazl fills the vegetal (large half-max), with the cyclinB1 cap broadest in
+Δ6+11. The `*_masterplot_all.tif` figure for each oocyte is the easiest way to
+confirm a run at a glance (raw image, coverage heatmaps, fraction-coverage
+curves).
+
+> The exact expected values and run time for this demo are being captured from
+> a clean run on MATLAB Online and will be filled in here. *(to complete)*
+
+### Expected run time
+*To be filled in from the demo run on MATLAB Online* (wrap each step in
+`tic`/`toc` as shown above and record the total for the three oocytes).
 
 ## Output files (per oocyte, in `data/`)
 
